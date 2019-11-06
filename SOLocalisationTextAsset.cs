@@ -36,8 +36,7 @@ namespace SOLocalisation
         /// <returns>Current language</returns>
         private Language GetCurrentLanguage()
         {
-            return Language.en; //TODO - fix this
-            //return LocalisationManager.CurrentLanguage;
+            return SOLocalisationManager.Instance.CurrentLanguage;
         }
 
         /// <summary>

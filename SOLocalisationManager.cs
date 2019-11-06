@@ -10,7 +10,7 @@ namespace SOLocalisation
     public class SOLocalisationManager : MonoBehaviour
     {
         private static SOLocalisationManager _instance;
-        private static SOLocalisationManager Instance => _instance;
+        public static SOLocalisationManager Instance => _instance;
 
         private void Awake()
         {
