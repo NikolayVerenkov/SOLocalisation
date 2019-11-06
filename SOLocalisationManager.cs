@@ -2,7 +2,6 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-
 public enum Language { en, ru }
 
 namespace SOLocalisation
@@ -30,6 +29,11 @@ namespace SOLocalisation
                 AssetList(AutoPopulate = true),
                 Tooltip("All text localisation scriptable objects")]
         private SOLocalisationTextAsset[] localisationTextAssets;
+
+        [field: SerializeField,
+                ReadOnly,
+                Tooltip("Name for the localisation csv")]
+        private string localisationFileName = "localisation";
 
         /// <summary>
         /// Add all currently available language keys to all registered localisation text scriptable objects
@@ -73,18 +77,39 @@ namespace SOLocalisation
                     if (col == 0 && row == 0) //Top left corner
                         sheet.SetCell<string>(col, row, "Localisation");
                     else if (row == 0) //Headers
-                        sheet.SetCell<string>(col, row, GetLanguageStringByIndex(col - 1));
+                        sheet.SetCell<string>(col, row, GetLanguageStringWithIndex(col - 1));
                     else if (col == 0) //Keys
                         sheet.SetCell<string>(col, row, localisationTextAssets[row - 1].name);
                     else //Translations
-                        sheet.SetCell<string>(col, row, localisationTextAssets[row - 1].text[GetLanguageByIndex(col - 1)]);
-            sheet.Save("localisation.csv");
+                        sheet.SetCell<string>(col, row, localisationTextAssets[row - 1].text[GetLanguageWithIndex(col - 1)]);
+            sheet.Save(localisationFileName + ".csv");
+            Debug.Log("Localisation export finished. Exported " + (localisationTextAssets.Length) + " lines in " + (Enum.GetNames(typeof(Language)).Length) + " languages");
         }
 
         [ButtonGroup("Export and Import")]
         private void Import()
         {
+            // Create a blank ES3Spreadsheet.
+            var sheet = new ES3Spreadsheet();
+            sheet.Load(localisationFileName + ".csv");
+            for (int row = 1; row < localisationTextAssets.Length + 1; row++)
+            {
+                SOLocalisationTextAsset textAsset = localisationTextAssets[row - 1];
+                if (sheet.GetCell<string>(0, row) != textAsset.name.ToString())
+                {
+                    //Catch error if the name in the CSV file is not equal to the name of the scriptable object
+                    Debug.LogError("Row: " + row + ". Name from CSV " + sheet.GetCell<string>(0, row) + " != " + textAsset.name.ToString() + "name from scriptable object. Check row order");
 
+                }
+                else
+                {
+                    for (int col = 1; col < sheet.ColumnCount; col++)
+                    {
+                        textAsset.text[GetLanguageWithIndex(col - 1)] = sheet.GetCell<string>(col, row);
+                    }
+                }
+            }
+            Debug.Log("Localisation import finished. Imported " + (localisationTextAssets.Length) + " lines in " + (sheet.ColumnCount - 1) + " languages");       
         }
 
         [Button]
@@ -98,7 +123,7 @@ namespace SOLocalisation
             sheet.Save("mySheet.csv");
         }
 
-        private String GetLanguageStringByIndex(int index)
+        private String GetLanguageStringWithIndex(int index)
         {
             if (Enum.IsDefined(typeof(Language), index))
                 return ((Language)index).ToString();
@@ -106,7 +131,7 @@ namespace SOLocalisation
                 return "Invalid Value";
         }
 
-        private Language GetLanguageByIndex(int index)
+        private Language GetLanguageWithIndex(int index)
         {
             if (Enum.IsDefined(typeof(Language), index))
                 return ((Language)index);
