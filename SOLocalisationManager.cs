@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 
 public enum Language { en, ru }
 
@@ -8,6 +9,7 @@ namespace SOLocalisation
 {
     public class SOLocalisationManager : MonoBehaviour
     {
+        #region Singleton
         private static SOLocalisationManager _instance;
         public static SOLocalisationManager Instance => _instance;
 
@@ -18,6 +20,7 @@ namespace SOLocalisation
             else
                 _instance = this;
         }
+        #endregion
 
         [field: SerializeField,
                 ReadOnly,
@@ -34,6 +37,11 @@ namespace SOLocalisation
                 ReadOnly,
                 Tooltip("Name for the localisation csv")]
         private string localisationFileName = "localisation";
+
+        [field: SerializeField,
+                ReadOnly,
+                Tooltip("All text controllers active in the scene")]
+        private List<SOLocalisationTextController> textControllers = new List<SOLocalisationTextController>();
 
         /// <summary>
         /// Add all currently available language keys to all registered localisation text scriptable objects
@@ -59,6 +67,7 @@ namespace SOLocalisation
             if (currentLanguage != language)
             {
                 currentLanguage = language;
+                RefreshTextControllers();
                 return true;
             }
             else
@@ -110,6 +119,30 @@ namespace SOLocalisation
                 }
             }
             Debug.Log("Localisation import finished. Imported " + (localisationTextAssets.Length) + " lines in " + (sheet.ColumnCount - 1) + " languages");       
+        }
+
+        //TODO add summary
+        public bool RegisterTextController(SOLocalisationTextController textController)
+        {
+            if (!textControllers.Contains(textController))
+            {
+                textControllers.Add(textController);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+                
+        }
+
+        //TODO add summary
+        public void RefreshTextControllers()
+        {
+            foreach (SOLocalisationTextController controller in textControllers)
+            {
+                controller.Refresh();
+            }
         }
 
         [Button]
