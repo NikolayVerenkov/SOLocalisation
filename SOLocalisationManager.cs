@@ -76,6 +76,21 @@ namespace SOLocalisation
             }
         }
 
+        /// <summary>
+        /// Try to change the current language and if successfull raise a language change event
+        /// </summary>
+        /// <param name="languageIndex">Language index in the enum</param>
+        [Button]
+        public void ChangeLanguageWithIndex(int languageIndex = 0)
+        {
+            Language newLanguage = GetLanguageWithIndex(languageIndex);
+            if (currentLanguage != newLanguage)
+            {
+                currentLanguage = newLanguage;
+                RefreshTextControllers();
+            }
+        }
+
         [ButtonGroup("Export and Import")]
         private void Export()
         {
