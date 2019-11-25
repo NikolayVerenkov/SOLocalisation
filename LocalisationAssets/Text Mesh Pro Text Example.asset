@@ -23,12 +23,12 @@ MonoBehaviour:
     SerializationNodes:
     - Name: text
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[Language, Assembly-CSharp-firstpass],[System.String,
+      Data: 0|System.Collections.Generic.Dictionary`2[[SOLocalisation.Language, Assembly-CSharp-firstpass],[System.String,
         mscorlib]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Language, Assembly-CSharp-firstpass]],
-        mscorlib
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SOLocalisation.Language,
+        Assembly-CSharp-firstpass]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
