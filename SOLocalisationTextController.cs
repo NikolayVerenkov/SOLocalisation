@@ -9,10 +9,24 @@ namespace SOLocalisation
 {
     public class SOLocalisationTextController : MonoBehaviour
     {
+        /// <summary>
+        /// Standard Unity UI Text reference
+        /// </summary>
         private Text textComponent;
+
+        /// <summary>
+        /// TextMeshPro UI text component reference 
+        /// </summary>
         private TextMeshProUGUI textMeshProUGUIComponent;
+
+        /// <summary>
+        /// TextMeshPro worldspace text component reference 
+        /// </summary>
         private TextMeshPro textMeshProComponent;
 
+        /// <summary>
+        /// Reference to the text asset scriptable object
+        /// </summary>
         [field: SerializeField,
                 Required]
         private SOLocalisationTextAsset textAsset;
@@ -31,6 +45,9 @@ namespace SOLocalisation
             Refresh();
         }
 
+        /// <summary>
+        /// Refresh text in the attached text component
+        /// </summary>
         [Button]
         public void Refresh()
         {
@@ -49,6 +66,9 @@ namespace SOLocalisation
             }
         }
 
+        /// <summary>
+        /// Register this text controller with the SOLocalisationManager
+        /// </summary>
         private void Register()
         {
             SOLocalisationManager.Instance.RegisterTextController(this);

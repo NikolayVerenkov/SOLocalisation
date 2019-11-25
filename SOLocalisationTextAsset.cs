@@ -8,12 +8,16 @@ namespace SOLocalisation
     [CreateAssetMenu(fileName = "LocalisationText", menuName = "Localisation Text")]
     public class SOLocalisationTextAsset : SerializedScriptableObject
     {
-        public Dictionary<Language, string> text = new Dictionary<Language, string>
-        {
-            { Language.en, "" },
-            { Language.ru, "" }
-        };
+        /// <summary>
+        /// Dictionary with text values for different languages
+        /// </summary>
+        public Dictionary<Language, string> text = new Dictionary<Language, string>();
 
+        /// <summary>
+        /// Add a new language to the asset if it was not added before
+        /// </summary>
+        /// <param name="language">Language enum value to add</param>
+        /// <param name="translation">Asset value in the new language</param>
         [Title("Controls")]
         private void AddLanguage(Language language, string translation = "")
         {
@@ -21,6 +25,9 @@ namespace SOLocalisation
                 text.Add(language, translation);
         }
 
+        /// <summary>
+        /// Add all currently existing languages to this asset without any text values
+        /// </summary>
         [Button]
         public void AddAllLanguageKeys()
         {

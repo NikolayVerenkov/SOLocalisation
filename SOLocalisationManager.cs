@@ -3,10 +3,11 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 
-public enum Language { en, ru }
 
 namespace SOLocalisation
 {
+    public enum Language { en, ru };
+
     public class SOLocalisationManager : MonoBehaviour
     {
         #region Singleton
@@ -22,22 +23,34 @@ namespace SOLocalisation
         }
         #endregion
 
+        /// <summary>
+        /// Current language
+        /// </summary>
         [field: SerializeField,
                 ReadOnly,
                 Tooltip("Current language")]
         private Language currentLanguage = Language.en;
         public Language CurrentLanguage => currentLanguage;
 
+        /// <summary>
+        /// All text localisation scriptable objects
+        /// </summary>
         [field: SerializeField,
                 AssetList(AutoPopulate = true),
                 Tooltip("All text localisation scriptable objects")]
         private SOLocalisationTextAsset[] localisationTextAssets;
 
+        /// <summary>
+        /// Name for the localisation csv file
+        /// </summary>
         [field: SerializeField,
                 ReadOnly,
-                Tooltip("Name for the localisation csv")]
+                Tooltip("Name for the localisation csv file")]
         private string localisationFileName = "localisation";
 
+        /// <summary>
+        /// All text controllers active in the scene
+        /// </summary>
         [field: SerializeField,
                 ReadOnly,
                 Tooltip("All text controllers active in the scene")]
@@ -91,6 +104,9 @@ namespace SOLocalisation
             }
         }
 
+        /// <summary>
+        /// Export all language data to the csv file
+        /// </summary>
         [ButtonGroup("Export and Import")]
         private void Export()
         {
@@ -110,6 +126,9 @@ namespace SOLocalisation
             Debug.Log("Localisation export finished. Exported " + (localisationTextAssets.Length) + " lines in " + (Enum.GetNames(typeof(Language)).Length) + " languages");
         }
 
+        /// <summary>
+        /// Import all language data from the previously exported CSV
+        /// </summary>
         [ButtonGroup("Export and Import")]
         private void Import()
         {
@@ -136,7 +155,11 @@ namespace SOLocalisation
             Debug.Log("Localisation import finished. Imported " + (localisationTextAssets.Length) + " lines in " + (sheet.ColumnCount - 1) + " languages");       
         }
 
-        //TODO add summary
+        /// <summary>
+        /// Register a text controller with the manager
+        /// </summary>
+        /// <param name="textController">Controller to register</param>
+        /// <returns>true if the registration was successfull, false if this controller has already been registered</returns>
         public bool RegisterTextController(SOLocalisationTextController textController)
         {
             if (!textControllers.Contains(textController))
@@ -151,7 +174,9 @@ namespace SOLocalisation
                 
         }
 
-        //TODO add summary
+        /// <summary>
+        /// Refresh text displayed on all text controllers
+        /// </summary>
         public void RefreshTextControllers()
         {
             foreach (SOLocalisationTextController controller in textControllers)
@@ -160,17 +185,11 @@ namespace SOLocalisation
             }
         }
 
-        [Button]
-        private void TestCSV()
-        {
-            var sheet = new ES3Spreadsheet();
-            // Add data to cells in the spreadsheet.
-            for (int col = 0; col < 10; col++)
-                for (int row = 0; row < 8; row++)
-                    sheet.SetCell<string>(col, row, "someData");
-            sheet.Save("mySheet.csv");
-        }
-
+        /// <summary>
+        /// Get langauge string value based on its index
+        /// </summary>
+        /// <param name="index">index of the language enum</param>
+        /// <returns>language string</returns>
         private String GetLanguageStringWithIndex(int index)
         {
             if (Enum.IsDefined(typeof(Language), index))
@@ -179,6 +198,11 @@ namespace SOLocalisation
                 return "Invalid Value";
         }
 
+        /// <summary>
+        /// Get langauge string value based on its index
+        /// </summary>
+        /// <param name="index">index of the language enum</param>
+        /// <returns>language enum</returns>
         private Language GetLanguageWithIndex(int index)
         {
             if (Enum.IsDefined(typeof(Language), index))
