@@ -7,7 +7,7 @@ using UnityEngine;
 namespace SOLocalisation
 {
     [RequireComponent(typeof(TMP_Dropdown))]
-    public class SOLocalisationSelector : MonoBehaviour
+    public class LocalizationSelector : MonoBehaviour
     {
         private TMP_Dropdown dropdown;
 
@@ -29,7 +29,7 @@ namespace SOLocalisation
         /// <param name="languageIndex">Language index in the enum</param>
         public void ChangeLanguageWithIndex(int languageIndex = 0)
         {
-            SOLocalisationManager.Instance.ChangeLanguageWithIndex(languageIndex);
+            LocalizationManager.Instance.ChangeLanguageWithIndex(languageIndex);
         }
 
     }
